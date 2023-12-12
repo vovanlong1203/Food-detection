@@ -18,41 +18,49 @@ def home(request):
     return render(request, "index.html")
 
 
-
 def predict(request):
-    if request.method == "POST" and request.FILES['image']:
-        img_path = request.FILES['image']
+    if request.method == "POST" and request.FILES["image"]:
+        img_path = request.FILES["image"]
 
         img = image.load_img(img_path, target_size=(224, 224))
         img = image.img_to_array(img)
-        
-        #load efficientnet
+
+        # load efficientnet
         efficientNet = EfficientNetB0(include_top=False, weights="imagenet")
-        #load task model
-        classify_model = load_model('Dish_Recognition_12.h5')
-        
+        # load task model
+        classify_model = load_model("Dish_Recognition_12.h5")
+
         feature = np.expand_dims(img, axis=0)
         feature = preprocess_input(feature)
         feature = efficientNet.predict(feature)
         output = classify_model.predict(feature)
-        
-        LABELS = ['Banh chung','Banh mi', 'Banh tet', 'Banh trang', 'Banh xeo', 'Bun', 'Com tam', 'Goi cuon', 'Pho', 'Bun dau mam tom', 'Nem chua', 'Chao long']
-        
+
+        LABELS = [
+            "Banh chung",
+            "Banh mi",
+            "Banh tet",
+            "Banh trang",
+            "Banh xeo",
+            "Bun",
+            "Com tam",
+            "Goi cuon",
+            "Pho",
+            "Bun dau mam tom",
+            "Nem chua",
+            "Chao long",
+        ]
+
         percent = output.max() * 100
         label_predict = LABELS[np.argmax(output)]
-        print("model's prediction:",label_predict, "- Percentage:", percent, '%')
-        
+        print("model's prediction:", label_predict, "- Percentage:", percent, "%")
+
         text_food = content_food(label_predict)
-        
+
         return JsonResponse(
-            {
-                'label_predict' : label_predict,
-                'percent' : percent,
-                'text' : text_food
-            }
+            {"label_predict": label_predict, "percent": percent, "text": text_food}
         )
-        
-        
+
+
 def content_food(request, item):
     if item == "Banh mi":
         content = wikipedia.summary("Bánh mì")
@@ -68,19 +76,66 @@ def content_food(request, item):
         content = "Cháo lòng là món cháo được nấu theo phương thức nấu cháo thông thường, trong sự kết hợp với nước dùng ngọt làm từ xương lợn hay nước luộc lòng lợn, và nguyên liệu chính cho bát cháo không thể thiếu các món phủ tạng lợn luộc, dồi. Cháo lòng tương đối phổ thông thậm chí khá bình dân trong ẩm thực Việt Nam, được bán rộng rãi tại các cửa hàng lòng lợn trong cả nước, tạo nên một bộ ba sản phẩm được ăn theo thứ tự trong bữa ăn là tiết canh, lòng lợn, cháo lòng, và thường kết hợp với rượu đế."
     else:
         content = wikipedia.summary(item)
-        
+
     return content
-   
+
 
 def upload_image(request):
     if request.method == "POST" and request.FILES.get("image"):
-        image = request.FILES["image"]
-        UploadedImage.objects.create(image=image)
-        return redirect("index")
+        img_path = request.FILES["image"]
+
+        # img_path = request.FILES['image']
+
+        img = image.load_img(img_path, target_size=(224, 224))
+        img = image.img_to_array(img)
+
+        # load efficientnet
+        efficientNet = EfficientNetB0(include_top=False, weights="imagenet")
+        # load task model
+        classify_model = load_model("Dish_Recognition_12.h5")
+
+        feature = np.expand_dims(img, axis=0)
+        feature = preprocess_input(feature)
+        feature = efficientNet.predict(feature)
+        output = classify_model.predict(feature)
+
+        LABELS = [
+            "Banh chung",
+            "Banh mi",
+            "Banh tet",
+            "Banh trang",
+            "Banh xeo",
+            "Bun",
+            "Com tam",
+            "Goi cuon",
+            "Pho",
+            "Bun dau mam tom",
+            "Nem chua",
+            "Chao long",
+        ]
+
+        percent = output.max() * 100
+        label_predict = LABELS[np.argmax(output)]
+        print("model's prediction:", label_predict, "- Percentage:", percent, "%")
+
+        text_food = content_food(label_predict)
+
+        UploadedImage.objects.create(image=img_path)
+        print(img_path)
+        return render(
+            request,
+            "index.html",
+            {
+                "label_predict": label_predict,
+                "percent": percent,
+                "text": text_food,
+                "link_image": img_path,
+            },
+        )
+
     return redirect("index")
 
 
 def index(request):
     images = UploadedImage.objects.latest("timestamp")
     return render(request, "index.html", {"images": images})
-

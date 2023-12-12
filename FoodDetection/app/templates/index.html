@@ -26,9 +26,11 @@
       <div class="row main-container">
         <div class="col-2"></div>
         <div class="col-4 container-image">
-          
-          <img src="{{images.image.url }}" alt="Uploaded Image" />
-          
+          {% if link_image %}
+            <img src="{{ link_image }}" alt="Uploaded Image" />
+          {% else %}
+          <img src="" alt="Uploaded Image" />
+          {% endif %}
           <!-- <img src=".\static\img\tech1.jpg" alt="" /> -->
         </div>
         <div class="col-4">
@@ -41,7 +43,11 @@
             </form>
           </div>
           <div class="container-detect">
-            <div><br />Phở bò</div>
+            {% if label_predict %}
+              <div><br />{{label_predict}}</div>
+            {% else %}
+            <div><br />None</div>
+            {% endif %}
           </div>
         </div>
         <div class="col-2"></div>
