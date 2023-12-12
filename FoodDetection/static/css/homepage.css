@@ -1,0 +1,13 @@
+.container{
+    margin-top: 200px;
+}
+.container-image{
+    background-color: aliceblue;
+    padding: 20px;
+    height: 300px;
+}
+.container-detect{
+    background-color: aliceblue;
+    padding: 20px;
+    height: 300px;
+}
