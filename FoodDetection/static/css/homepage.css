@@ -20,6 +20,10 @@ body{
     padding: 20px;
     height: 350px;
     border-radius: 20px;
+    padding: 10px;
+}
+.image img{
+  height: 280px;  
 }
 .container-detect{
     margin-top: 180px;

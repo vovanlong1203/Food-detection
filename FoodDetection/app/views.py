@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.http import HttpResponse
 from .models import UploadedImage
-
 from tensorflow.keras.preprocessing import image
 import matplotlib.pyplot as plt
 from tensorflow.keras.applications import EfficientNetB0
@@ -61,7 +60,7 @@ def predict(request):
         )
 
 
-def content_food(request, item):
+def content_food(item):
     if item == "Banh mi":
         content = wikipedia.summary("Bánh mì")
     elif item == "Banh trang":
@@ -80,15 +79,26 @@ def content_food(request, item):
     return content
 
 
+# http://127.0.0.1:8000/static/uploads/food_long.jpg
 def upload_image(request):
     if request.method == "POST" and request.FILES.get("image"):
         img_path = request.FILES["image"]
+        img_path = str(img_path)
+        img_paths = "../../static/uploads/" + img_path
+        img_pathss = (
+            "D:\\Machine learning\\Project\\Food-detection\\FoodDetection\\static\\uploads\\"
+            + img_path
+        )
+        # img_paths = img_path
+        # # img_path = request.FILES['image']
+        # print(img_paths)
+        img = image.load_img(
+            img_pathss,
+            target_size=(224, 224),
+        )
 
-        # img_path = request.FILES['image']
-
-        img = image.load_img(img_path, target_size=(224, 224))
         img = image.img_to_array(img)
-
+        print(img)
         # load efficientnet
         efficientNet = EfficientNetB0(include_top=False, weights="imagenet")
         # load task model
@@ -121,7 +131,8 @@ def upload_image(request):
         text_food = content_food(label_predict)
 
         UploadedImage.objects.create(image=img_path)
-        print(img_path)
+        # print(img_path)
+
         return render(
             request,
             "index.html",
@@ -129,7 +140,7 @@ def upload_image(request):
                 "label_predict": label_predict,
                 "percent": percent,
                 "text": text_food,
-                "link_image": img_path,
+                "link_image": img_paths,
             },
         )
 
