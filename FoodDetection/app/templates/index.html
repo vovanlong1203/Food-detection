@@ -18,39 +18,39 @@
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="../static/css/homepage.css" />
+    <link rel="stylesheet" href="../../static/css/homepage.css" />
     <title>Hello, world!</title>
   </head>
   <body>
     <div class="container">
       <div class="row main-container">
-        <div class="col-2"></div>
-        <div class="col-4 container-image">
-          {% if link_image %}
-            <img src="{{ link_image }}" alt="Uploaded Image" />
-          {% else %}
-          <img src="" alt="Uploaded Image" />
-          {% endif %}
-          <!-- <img src=".\static\img\tech1.jpg" alt="" /> -->
-        </div>
-        <div class="col-4">
+        <div class="col-6 container-image">
+          <h2>Nhận diện món ăn !</h2>
           <div class="upload-image">
-            <h2>Upload Image</h2>
-            <form method="post" action="/upload/" enctype="multipart/form-data">
+            <form method="post" class="form-upload" action="/upload/" enctype="multipart/form-data">
               {% csrf_token %}
-              <input type="file" name="image" accept="image/*" />
-              <button type="submit">Upload</button>
+              <input class="upfile-button" type="file" name="image" accept="image/*" />
+              <button type="submit">Nhận diện</button>
             </form>
           </div>
+          <div class="image">
+            {% if link_image %}
+            <img src="{{ link_image }}" alt="Uploaded Image" />
+            {% else %}
+            <img src="" alt="Uploaded Image" />
+            {% endif %}
+            <img src=".\static\img\tech1.jpg" alt="" />
+          </div>
+        </div>
+        <div class="col-6">
           <div class="container-detect">
             {% if label_predict %}
-              <div><br />{{label_predict}}</div>
+            <div><br />{{label_predict}}</div>
             {% else %}
             <div><br />None</div>
             {% endif %}
           </div>
         </div>
-        <div class="col-2"></div>
       </div>
     </div>
   </body>
