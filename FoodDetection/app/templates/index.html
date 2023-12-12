@@ -34,20 +34,22 @@
             </form>
           </div>
           <div class="image">
+            <h4>Món ăn của bạn </h4>
             {% if link_image %}
-            <img src="{{ link_image }}" alt="Uploaded Image" />
+            <img src="{{ link_image }}" alt="img" />
             {% else %}
-            <img src="" alt="Uploaded Image" />
+            <img src="" alt="" />
             {% endif %}
             <!-- <img src="../../static/uploads/food_long.jpg" alt="" /> -->
           </div>
         </div>
         <div class="col-6">
           <div class="container-detect">
+            <h4>Mô tả món ăn </h4>
             {% if label_predict %}
-            <div><br />{{label_predict}}</div>
+            <div class="label_predict"><br />{{text}}</div>
             {% else %}
-            <div><br />None</div>
+            <div class="label_predict"><br />Chưa có món ăn cần được mô tả !</div>
             {% endif %}
           </div>
         </div>

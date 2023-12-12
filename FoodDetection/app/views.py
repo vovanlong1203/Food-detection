@@ -83,6 +83,7 @@ def content_food(item):
 def upload_image(request):
     if request.method == "POST" and request.FILES.get("image"):
         img_path = request.FILES["image"]
+        UploadedImage.objects.create(image=img_path)
         img_path = str(img_path)
         img_paths = "../../static/uploads/" + img_path
         img_pathss = (
