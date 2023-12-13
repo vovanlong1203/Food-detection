@@ -24,7 +24,7 @@
   <body>
     <div class="container">
       <div class="row main-container">
-        <div class="col-6 container-image">
+        <div class="col-5 container-image">
           <h2>Nhận diện món ăn !</h2>
           <div class="upload-image">
             <form method="post" class="form-upload" action="/upload/" enctype="multipart/form-data">
@@ -43,12 +43,14 @@
             <!-- <img src="../../static/uploads/food_long.jpg" alt="" /> -->
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-7">
           <div class="container-detect">
-            <h4>Mô tả món ăn </h4>
+            
             {% if label_predict %}
+            <h4>{{label_predict}} </h4>
             <div class="label_predict"><br />{{text}}</div>
             {% else %}
+            <h4>Mô tả món ăn </h4>
             <div class="label_predict"><br />Chưa có món ăn cần được mô tả !</div>
             {% endif %}
           </div>
